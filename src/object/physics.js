@@ -47,113 +47,95 @@ var Space = cc.Node.extend({
 			var object = this.objects[i];
 			var pos = object.physics.destination;
 			var tiles = this.tileMap.getSurroundTile(pos,"through");
+			var collision = false;
 			for(var ii=0; ii<tiles.length; ii++){
 				var objBox = object.getDestinationBoundingBox();
 				if(tiles[ii].status == false){
 					continue;
 				}
-				if(ii<4){
-					switch (ii){
-						case 1 :
-							pos = (cc.p(pos.x,pos.y-rect.height));
-							speed[1] = true;
-							break;
-						case 3 :
-							pos = (cc.p(pos.x+rect.width,pos.y));
-							speed[0] = true;
-							break;
-						case 5 :
-							pos = (cc.p(pos.x-rect.width,pos.y));
-							speed[0] = true;
-							break;
-						case 7 :
-							pos = (cc.p(pos.x,pos.y+rect.height));
-							speed[1] = true;
-							break;						
-					}					
-				}
-				
-				
-				
-				
 				var result = cc.rectIntersectsRect(objBox,tiles[ii].rect);
-				console.log(tiles[ii].rect);
+				var speed = [false,false];
 				if(result == true){
 					var rect = cc.rectIntersection(objBox,tiles[ii].rect);
-					var speed = [false,false];
-					switch (ii){
-						case 0 :
-							if (rect.width>=rect.height){
-								pos = (cc.p(pos.x+rect.width,pos.y));
-								speed[0] = true;
-							}
-							else{
+					if(ii<4){
+						switch (ii){
+							case 0 :
 								pos = (cc.p(pos.x,pos.y-rect.height));
 								speed[1] = true;
-							}
-							break;
-						case 1 :
-							pos = (cc.p(pos.x,pos.y-rect.height));
-							speed[1] = true;
-							break;
-						case 2:
-							if (rect.width>=rect.height){
-								pos = (cc.p(pos.x-rect.width,pos.y));
-								speed[0] = true;
-							}
-							else{
-								pos = (cc.p(pos.x,pos.y-rect.height));
-								speed[1] = true;
-							}
-							break;
-						case 3 :
-							pos = (cc.p(pos.x+rect.width,pos.y));
-							speed[0] = true;
-							break;
-						case 4 :
-							cc.log("invalid position!");
-							break;
-						case 5 :
-							pos = (cc.p(pos.x-rect.width,pos.y));
-							speed[0] = true;
-							break;
-						case 6 :
-							if (rect.width>=rect.height){
+								break;
+							case 1 :
 								pos = (cc.p(pos.x+rect.width,pos.y));
 								speed[0] = true;
-							}
-							else{
-								pos = (cc.p(pos.x,pos.y+rect.height));
-								speed[1] = true;
-							}
-							break;
-						case 7 :
-							pos = (cc.p(pos.x,pos.y+rect.height));
-							speed[1] = true;
-							break;
-						case 8 :
-							if (rect.width>=rect.height){
+								break;
+							case 2 :
 								pos = (cc.p(pos.x-rect.width,pos.y));
 								speed[0] = true;
-							}
-							else{
+								break;
+							case 3 :
 								pos = (cc.p(pos.x,pos.y+rect.height));
 								speed[1] = true;
-							}
-							break;							
+								break;						
+						}
+						collision = true;
 					}
-					if(speed[0] == true){
-						object.setSpeed(cc.p(0,object.getSpeed().y));
+					else{
+						if(collision == true){
+							break;
+						}
+						else{
+							switch (ii){
+								case 5 :
+									if (rect.width>=rect.height){
+										pos = (cc.p(pos.x+rect.width,pos.y));
+										speed[0] = true;
+									}
+									else{
+										pos = (cc.p(pos.x,pos.y-rect.height));
+										speed[1] = true;
+									}
+									break;
+								case 6:
+									if (rect.width>=rect.height){
+										pos = (cc.p(pos.x-rect.width,pos.y));
+										speed[0] = true;
+									}
+									else{
+										pos = (cc.p(pos.x,pos.y-rect.height));
+										speed[1] = true;
+									}
+									break;
+								case 7 :
+									if (rect.width>=rect.height){
+										pos = (cc.p(pos.x+rect.width,pos.y));
+										speed[0] = true;
+									}
+									else{
+										pos = (cc.p(pos.x,pos.y+rect.height));
+										speed[1] = true;
+									}
+									break;
+								case 8 :
+									if (rect.width>=rect.height){
+										pos = (cc.p(pos.x-rect.width,pos.y));
+										speed[0] = true;
+									}
+									else{
+										pos = (cc.p(pos.x,pos.y+rect.height));
+										speed[1] = true;
+									}
+									break;							
+							}							
+						}
 					}
-					if(speed[1] == true){
-						object.setSpeed(cc.p(object.getSpeed().x,0));
-					}
-					object.physics.destination = pos;
-					
 				}
-
+				if(speed[0] == true){
+					object.setSpeed(cc.p(0,object.getSpeed().y));
+				}
+				if(speed[1] == true){
+					object.setSpeed(cc.p(object.getSpeed().x,0));
+				}
+				object.physics.destination = pos;
 			}
-			console.log(pos);
 			object.setPosition(pos);
 		}
 	},
