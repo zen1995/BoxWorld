@@ -8,12 +8,14 @@ var Scene_main=cc.Scene.extend({
 		var tmxLayer = new layer_tileMap();
 		this.addChild(tmxLayer,1);
 		
-
+		var analog = new Layer_analogStick();
+		this.addChild(analog,2);
 		 
+		 this.initGameInfo()
 	},
 	
-//	initGameInfo:function(){
-//		gameConstant.winSize.width = cc.director.getWinSize().width;
-//		gameConstant.winSize.height = cc.director.getWinSize().height;
-//	}
+	initGameInfo:function(){
+		gameConstant.winSize.width = cc.director.getWinSize().width;
+		gameConstant.winSize.height = cc.director.getWinSize().height;
+	}
 });

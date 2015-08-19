@@ -14,12 +14,16 @@
     	
         "src/resource.js",
         
+        "src/var/globalVars.js",
+        "src/var/gameConstant.js",
+        
         "src/object/base.js",
         "src/object/MyBox.js",
         "src/object/physics.js",
         
         "src/layer/layer_tileMap.js",
         "src/layer/Layer_background.js",
+        "src/layer/Layer_analogStick.js",
         
         "src/scene/Scene_main.js",
         

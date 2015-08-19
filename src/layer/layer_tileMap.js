@@ -7,6 +7,7 @@ var layer_tileMap = cc.Layer.extend({
 		
 		var box = new MyBox();
 		this.addChild(box);
+		globalVars.myBox = box;
 		
 		var space = new Space({},this._map);
 		this.addChild(space);
@@ -16,6 +17,6 @@ var layer_tileMap = cc.Layer.extend({
 	
 	test:function(){
 		var rect = cc.rect(0,0,100,100);
-		console.log(rect);
+		//console.log(rect);
 	}
 });

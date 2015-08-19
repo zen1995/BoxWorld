@@ -10,6 +10,23 @@ var MyBox = basePhysicsObject.extend({
 	},
 	
 	init:function(){
-		this.physics.speed = cc.p(0,0);
+		this.physics.speed = cc.p(3,0);
+	},
+	
+	move:function(direction){
+		switch (direction){
+			case "up":
+				this.physics.speed.y+=1
+				break;
+			case "right":
+				this.physics.speed.x+=1
+				break;
+			case "down" :
+				this.physics.speed.y-=1
+				break;
+			case "left" :
+				this.physics.speed.x-=1
+				break;
+		}
 	}
 });

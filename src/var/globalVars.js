@@ -1,0 +1,3 @@
+var globalVars = {
+	myBox:null,
+}

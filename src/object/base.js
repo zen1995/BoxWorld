@@ -42,7 +42,7 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 			var row = Math.floor(i/3);//行
 			var tilePos = cc.p(p.x+column-1,p.y+row-1);
 			var info = new Object;
-			if(tilePos.x<0||tilePos.x>this.mapWidth||tilePos.y<=0||tilePos.y>= this.mapHeight){
+			if(tilePos.x<0||tilePos.x>=this.mapWidth||tilePos.y<0||tilePos.y>= this.mapHeight){
 				info.status = false;
 				posArray.push(info);
 				continue;
@@ -54,7 +54,6 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 			}
 			else{
 				var property=this.getPropertiesForGID(tileId);//get property
-				console.log(property)
 				var collision=property['through'];
 				if(collision=='true'){
 					var pos = this.getGameSpacePosition(tilePos);
