@@ -81,7 +81,8 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 var basePhysicsObject = cc.Sprite.extend({
 	physics:{
 		destination:null,
-		speed:null
+		speed:null,
+		mass:null
 	},
 	ctor:function(sprite){
 		this._super(sprite);

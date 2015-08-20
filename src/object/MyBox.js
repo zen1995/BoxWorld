@@ -1,7 +1,8 @@
 var MyBox = basePhysicsObject.extend({
 	physics:{
 		destination:null,
-		speed:null
+		speed:null,
+		mass:null
 	},
 	ctor:function(){
 		this._super(res.png_box);
@@ -11,6 +12,7 @@ var MyBox = basePhysicsObject.extend({
 	
 	init:function(){
 		this.physics.speed = cc.p(3,0);
+		this.physics.mass = 10;
 	},
 	
 	move:function(direction){

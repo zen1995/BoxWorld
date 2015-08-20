@@ -19,6 +19,7 @@
         
         "src/object/base.js",
         "src/object/MyBox.js",
+        "src/object/Box.js",
         "src/object/physics.js",
         
         "src/layer/layer_tileMap.js",
