@@ -43,6 +43,20 @@ var Space = cc.Node.extend({
 	
 	step:function(){
 		this.updateDestination();
+		this.CollisionWithBlock();
+	},
+	
+	updateDestination:function(){
+		for(var i=0;i<this.objects.length;i++){
+			var v = this.objects[i].getSpeed();
+			v=cc.p(v.x+this.config.gravity.x,v.y+this.config.gravity.y);
+			this.objects[i].setSpeed(v);
+			var pos = this.objects[i].getPosition();
+			this.objects[i].physics.destination = cc.p(pos.x+v.x,pos.y+v.y);
+		}
+	},
+	
+	CollisionWithBlock:function(){	
 		for(var i=0;i<this.objects.length;i++){
 			var object = this.objects[i];
 			var pos = object.physics.destination;
@@ -84,44 +98,44 @@ var Space = cc.Node.extend({
 						}
 						else{
 							switch (ii){
-								case 5 :
+								case 4 :
 									if (rect.width>=rect.height){
+										pos = (cc.p(pos.x,pos.y-rect.height));
+										speed[1] = true;
+									}
+									else{
 										pos = (cc.p(pos.x+rect.width,pos.y));
 										speed[0] = true;
 									}
-									else{
+									break;
+								case 5:
+									if (rect.width>=rect.height){
 										pos = (cc.p(pos.x,pos.y-rect.height));
 										speed[1] = true;
 									}
-									break;
-								case 6:
-									if (rect.width>=rect.height){
+									else{
 										pos = (cc.p(pos.x-rect.width,pos.y));
 										speed[0] = true;
 									}
-									else{
-										pos = (cc.p(pos.x,pos.y-rect.height));
+									break;
+								case 6 :
+									if (rect.width>=rect.height){
+										pos = (cc.p(pos.x,pos.y+rect.height));
 										speed[1] = true;
+									}
+									else{
+										pos = (cc.p(pos.x+rect.width,pos.y));
+										speed[0] = true;
 									}
 									break;
 								case 7 :
 									if (rect.width>=rect.height){
-										pos = (cc.p(pos.x+rect.width,pos.y));
-										speed[0] = true;
-									}
-									else{
 										pos = (cc.p(pos.x,pos.y+rect.height));
 										speed[1] = true;
 									}
-									break;
-								case 8 :
-									if (rect.width>=rect.height){
+									else{
 										pos = (cc.p(pos.x-rect.width,pos.y));
 										speed[0] = true;
-									}
-									else{
-										pos = (cc.p(pos.x,pos.y+rect.height));
-										speed[1] = true;
 									}
 									break;							
 							}							
@@ -137,16 +151,6 @@ var Space = cc.Node.extend({
 				object.physics.destination = pos;
 			}
 			object.setPosition(pos);
-		}
-	},
-	
-	updateDestination:function(){
-		for(var i=0;i<this.objects.length;i++){
-			var v = this.objects[i].getSpeed();
-			v=cc.p(v.x+this.config.gravity.x,v.y+this.config.gravity.y);
-			this.objects[i].setSpeed(v);
-			var pos = this.objects[i].getPosition();
-			this.objects[i].physics.destination = cc.p(pos.x+v.x,pos.y+v.y);
 		}
 	}
 	

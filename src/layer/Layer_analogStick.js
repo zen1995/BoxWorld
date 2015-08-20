@@ -101,7 +101,6 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseDown:function(event){
 		var location = event.getLocation();
-		console.log(location.x,gameConstant.winSize.width/2)
 		if(location.x>gameConstant.winSize.width/2){
 			return;
 		}
@@ -110,7 +109,6 @@ var Layer_analogStick = cc.Layer.extend({
 		this.stick.background.setPosition(location);
 		this.stick.stick.setVisible(true);
 		this.stick.stick.setPosition(location);
-		console.log("down")
 	},
 	
 	mouseMove:function(event){
