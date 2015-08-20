@@ -43,7 +43,8 @@ var Space = cc.Node.extend({
 	
 	step:function(){
 		this.updateDestination();
-		this.CollisionWithBlock();
+		this.collisionWithBlock();
+		this.collisionWithBox();
 	},
 	
 	updateDestination:function(){
@@ -56,7 +57,7 @@ var Space = cc.Node.extend({
 		}
 	},
 	
-	CollisionWithBlock:function(){	
+	collisionWithBlock:function(){	
 		for(var i=0;i<this.objects.length;i++){
 			var object = this.objects[i];
 			var pos = object.physics.destination;
@@ -150,42 +151,64 @@ var Space = cc.Node.extend({
 				}
 				object.physics.destination = pos;
 			}
-			object.setPosition(pos);
+			//object.setPosition(pos);
 		}
 	},
 	
 	collisionWithBox:function(){
-		for(var i=0;i<this.objects,length;i++){
+		for(var i=0;i<this.objects.length;i++){
+			var obj1 = this.objects[i];
 			for(var ii=i+1;ii<this.objects.length;ii++){
-				var obj1 = this.objects[i];
 				var obj2 = this.objects[ii];
 				var box1 = this.objects[i].getDestinationBoundingBox();
 				var box2 = this.objects[ii].getDestinationBoundingBox();
-				var result = c.rectIntersectsRect(box1,box2);
+				var pos1 = obj1.physics.destination,pos2 = obj2.physics.destination;
+				var result = cc.rectIntersectsRect(box1,box2);
 				if(result == true){
 					var rect = cc.rectIntersection(box1,box2);
 					var e = 1;
-					var m1 = box1.physics.mass,m2 = box2.physics.mass;
+					var m1 = obj1.physics.mass,m2 = obj2.physics.mass;
+					
 					if(rect.width>=rect.height){
-						var v10 = box1.getSpeed().y;
-						var v20 = box2.getSpeed().y;
+						var v10 = obj1.getSpeed().y;
+						var v20 = obj2.getSpeed().y;
 					}else{
-						var v10 = box1.getSpeed().x;
-						var v20 = box2.getSpeed().x;						
+						var v10 = obj1.getSpeed().x;
+						var v20 = obj2.getSpeed().x;						
 					}
 					var v11 = ((v10-v20)/e*m2 - (m1*v10+m2*v20) )/(-m1-m2);
 					var v21 = (-1*(m1*v10+m2*v20)-(v10-v20)/e*m1 )/(-m1-m2);
 					if(rect.width>=rect.height){
 						obj1.setSpeed(cc.p(obj1.getSpeed().x,v11));
-						obj2.setSpeed(cc.p(obj2.getSpeed().x,v21));						
+						obj2.setSpeed(cc.p(obj2.getSpeed().x,v21));
+
+						var max = Math.max(pos1.y,pos2.y);
+						if(max == pos1.y){
+							pos1 = (cc.p(pos1.x,pos1.y+rect.height));
+						}
+						else{
+							pos2 = (cc.p(pos2.x,pos2.y+rect.height));
+						}
 					}
 					else{
 						obj1.setSpeed(cc.p(v11,obj1.getSpeed().y));
-						obj2.setSpeed(cc.p(v21,obj2.getSpeed().y));							
+						obj2.setSpeed(cc.p(v21,obj2.getSpeed().y));
+						var max = Math.max(pos1.x,pos2.x);
+						if(max == pos1.x){
+							pos1 = (cc.p(pos1.x+rect.width,pos1.y));
+						}
+						else{
+							pos2 = (cc.p(pos2.x+rect.width,pos2.y));
+						}							
 					}
 				}
+				obj1.physics.destination = pos1;
+				obj2.physics.destination = pos2;
 			}
+			obj1.setPosition(obj1.physics.destination);
+			//cc.log("a")
 		}
+		
 	}
 	
 })
