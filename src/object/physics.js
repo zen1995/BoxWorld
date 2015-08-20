@@ -2,7 +2,7 @@ var Space = cc.Node.extend({
 	objects:null,
 	config:{
 		gravity:null,
-		maxSpeed:20
+		maxSpeed:10
 	},
 	blocks:null,
 	tileMap:null,
@@ -51,6 +51,12 @@ var Space = cc.Node.extend({
 		for(var i=0;i<this.objects.length;i++){
 			var v = this.objects[i].getSpeed();
 			v=cc.p(v.x+this.config.gravity.x,v.y+this.config.gravity.y);
+			if(Math.abs(v.x)>=this.config.maxSpeed){
+				v.x = this.config.maxSpeed*Math.abs(v.x)/v.x;
+			}
+			if(Math.abs(v.y)>=this.config.maxSpeed){
+				v.y = this.config.maxSpeed*Math.abs(v.y)/v.y;
+			}
 			this.objects[i].setSpeed(v);
 			var pos = this.objects[i].getPosition();
 			this.objects[i].physics.destination = cc.p(pos.x+v.x,pos.y+v.y);
@@ -206,7 +212,6 @@ var Space = cc.Node.extend({
 				obj2.physics.destination = pos2;
 			}
 			obj1.setPosition(obj1.physics.destination);
-			//cc.log("a")
 		}
 		
 	}

@@ -2,7 +2,7 @@ var MyBox = basePhysicsObject.extend({
 	physics:{
 		destination:null,
 		speed:null,
-		mass:null
+		mass:null,
 	},
 	ctor:function(){
 		this._super(res.png_box);
