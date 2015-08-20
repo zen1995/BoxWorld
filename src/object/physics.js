@@ -2,18 +2,19 @@ var Space = cc.Node.extend({
 	objects:null,
 	config:{
 		gravity:null,
-		maxSpeed:10
+		maxSpeed:7
 	},
 	blocks:null,
 	tileMap:null,
 	ctor:function(config,tileMap){
 		this._super();
 		this.init(config,tileMap);
-		this.mySchedule(this.update,0.03);
+		this.mySchedule(this.update,0.002);
+		//this.scheduleUpdate();
 	},
 	
 	init:function(config,tileMap){
-		this.config.gravity = cc.p(0,-0.3)//config;
+		this.config.gravity = cc.p(0,-0.3);//config;
 		this.objects = new Array();
 		this.blocks = new Array();
 		this.tileMap = tileMap;
