@@ -1,4 +1,4 @@
-var Layer_analogStick = cc.Layer.extend({
+var Layer_attackStick = cc.Layer.extend({
 	stick:{
 		background:null,
 		stick:null,
@@ -54,7 +54,7 @@ var Layer_analogStick = cc.Layer.extend({
 	},
 	
 	initStick:function(){
-		var stickposition = cc.p(100,100);
+		var stickposition = cc.p(gameConstant.winSize.width-100,100);
 		var posZero = cc.p(0,0);
 		this.stick.background = new cc.DrawNode();
 		this.stick.background.setPosition(stickposition);
@@ -67,8 +67,6 @@ var Layer_analogStick = cc.Layer.extend({
 		this.stick.stick.drawDot(posZero,20,cc.color(0,191,255,255));
 		this.stick.stick.setPosition(stickposition);
 		this.addChild(this.stick.stick);
-		
-
 	},
 	
 	
@@ -76,7 +74,7 @@ var Layer_analogStick = cc.Layer.extend({
 	update:function(){
 		if(this.touchStatus == false){
 			return;
-		}
+		}/*
 		switch (this.stick.level){
 			case "l0" :
 				return;
@@ -86,7 +84,7 @@ var Layer_analogStick = cc.Layer.extend({
 			case "l2" :
 				globalVars.myBox.move(this.stick.command);
 				break;
-		}
+		}*/
 	},
 	
 	touchDown:function(touches,event){
@@ -109,7 +107,7 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseDown:function(event){
 		var location = event.getLocation();
-		if(location.x>gameConstant.winSize.width/2){
+		if(location.x<gameConstant.winSize.width/2){
 			return;
 		}
 		this.touchStatus = true;
@@ -121,7 +119,7 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseMove:function(event){
 		var location = event.getLocation();
-		if(this.touchStatus == false || location.x>gameConstant.winSize.width/2){
+		if(this.touchStatus == false || location.x<gameConstant.winSize.width/2){
 			return false;
 		}
 		var distance = Math.sqrt((location.x-this.stick.background.x)*(location.x-this.stick.background.x)
@@ -153,7 +151,7 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseUp:function(event){
 		var location = event.getLocation();
-		if(location.x>gameConstant.winSize.width){
+		if(location.x<gameConstant.winSize.width){
 			return;
 		}
 		this.touchStatus = false;

@@ -1,7 +1,7 @@
 var Scene_main=cc.Scene.extend({
 	ctor:function(){
 		this._super();
-		//this.initGameInfo();
+		this.initGameInfo();
 		var colorLayer=new Layer_background();	
 		this.addChild(colorLayer,-1);
 		
@@ -10,8 +10,9 @@ var Scene_main=cc.Scene.extend({
 		
 		var analog = new Layer_analogStick();
 		this.addChild(analog,2);
-		 
-		 this.initGameInfo()
+		
+		var attackStick = new Layer_attackStick();
+		this.addChild(attackStick,2);
 	},
 	
 	initGameInfo:function(){

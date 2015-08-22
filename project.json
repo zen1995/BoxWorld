@@ -25,6 +25,7 @@
         "src/layer/layer_tileMap.js",
         "src/layer/Layer_background.js",
         "src/layer/Layer_analogStick.js",
+        "src/layer/Layer_attackStick.js",
         
         "src/scene/Scene_main.js",
         
