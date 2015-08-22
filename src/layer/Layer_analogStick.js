@@ -10,17 +10,6 @@ var Layer_analogStick = cc.Layer.extend({
 		level:"l0",
 		command:null,
 	},
-	attackStick:{
-		background:null,
-		stick:null,
-		info:{
-			l0:20,
-			l1:40,
-			l2:60,
-		},
-		level:"l0",
-		command:null,		
-	},
 	touchStatus:null,
 	stickBackground:null,
 	listener:{
@@ -30,7 +19,7 @@ var Layer_analogStick = cc.Layer.extend({
 		this._super();
 		this.init();
 		this.initStick();
-		this.initAttackStick();
+		
 		
 		if("mouse" in cc.sys.capabilities){
 			cc.eventManager.addListener({
@@ -78,24 +67,11 @@ var Layer_analogStick = cc.Layer.extend({
 		this.stick.stick.drawDot(posZero,20,cc.color(0,191,255,255));
 		this.stick.stick.setPosition(stickposition);
 		this.addChild(this.stick.stick);
+		
+
 	},
 	
-	initAttackStick:function(){
-		cc.log(gameConstant.winSize.width)
-		var stickposition = cc.p(gameConstant.winSize.width-100,100);
-		var posZero = cc.p(0,0);
-		this.attackStick.background = new cc.DrawNode();
-		this.attackStick.background.setPosition(stickposition);
-		this.attackStick.background.drawDot(posZero, this.stick.info.l2, cc.color(100,100,100,150));
-		this.attackStick.background.drawDot(posZero, this.stick.info.l1, cc.color(175,175,175,150));
-		this.attackStick.background.drawDot(posZero, this.stick.info.l0, cc.color(225,225,225,150));
-		this.addChild(this.attackStick.background,0);
-		
-		this.attackStick.stick = new cc.DrawNode();
-		this.attackStick.stick.drawDot(posZero,20,cc.color(0,191,255,255));
-		this.attackStick.stick.setPosition(stickposition);
-		this.addChild(this.attackStick.stick);		
-	},
+	
 	
 	update:function(){
 		if(this.touchStatus == false){
@@ -127,17 +103,14 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseDown:function(event){
 		var location = event.getLocation();
-		if(location.x<=gameConstant.winSize.width/2){//move stick
-			this.touchStatus = true;
-			this.stick.background.setVisible(true);
-			//this.stick.background.setPosition(location);
-			this.stick.stick.setVisible(true);
-			//this.stick.stick.setPosition(location);
+		if(location.x>gameConstant.winSize.width/2){
+			return;
 		}
-		else{//attack stick
-			;
-		}
-
+		this.touchStatus = true;
+		this.stick.background.setVisible(true);
+		//this.stick.background.setPosition(location);
+		this.stick.stick.setVisible(true);
+		//this.stick.stick.setPosition(location);
 	},
 	
 	mouseMove:function(event){

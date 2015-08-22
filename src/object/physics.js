@@ -59,6 +59,7 @@ var Space = cc.Node.extend({
 				v.y = this.config.maxSpeed*Math.abs(v.y)/v.y;
 			}
 			if(this.objects[i].physics.status == gameConstant.objectStatus.onGround && v.x!=0){
+				console.log(v.x)
 				if(Math.abs(v.x)<= 0.2){
 					v.x = 0;
 				}
@@ -108,6 +109,7 @@ var Space = cc.Node.extend({
 								pos = (cc.p(pos.x,pos.y+rect.height));
 								speed[1] = true;
 								object.physics.status = gameConstant.objectStatus.onGround;
+								console.log(object.physics.status)
 								break;						
 						}
 						collision = true;
