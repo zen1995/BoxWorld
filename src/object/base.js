@@ -82,7 +82,8 @@ var basePhysicsObject = cc.Sprite.extend({
 	physics:{
 		destination:null,
 		speed:null,
-		mass:null
+		mass:null,
+		status:null
 	},
 	ctor:function(sprite){
 		this._super(sprite);

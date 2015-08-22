@@ -2,7 +2,8 @@ var Box = basePhysicsObject.extend({
 	physics:{
 		destination:null,
 		speed:null,
-		mass:null
+		mass:null,
+		status:null
 	},
 	ctor:function(){
 		this._super(res.png_box2);
@@ -13,5 +14,6 @@ var Box = basePhysicsObject.extend({
 	init:function(){
 		this.physics.speed = cc.p(0,0);
 		this.physics.mass = 10;
+		this.status = gameConstant.objectStatus.onAir;
 	},
 });

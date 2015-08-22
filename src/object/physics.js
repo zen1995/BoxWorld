@@ -50,6 +50,7 @@ var Space = cc.Node.extend({
 	
 	updateDestination:function(){
 		for(var i=0;i<this.objects.length;i++){
+			//update speed
 			var v = this.objects[i].getSpeed();
 			v=cc.p(v.x+this.config.gravity.x,v.y+this.config.gravity.y);
 			if(Math.abs(v.x)>=this.config.maxSpeed){
@@ -58,7 +59,18 @@ var Space = cc.Node.extend({
 			if(Math.abs(v.y)>=this.config.maxSpeed){
 				v.y = this.config.maxSpeed*Math.abs(v.y)/v.y;
 			}
+			if(this.objects[i].physics.status == gameConstant.objectStatus.onGround && v.x!=0){
+				console.log(v.x)
+				if(Math.abs(v.x)<= 0.2){
+					v.x = 0;
+				}
+				else{
+					v.x = v.x - 0.2*Math.abs(v.x)/v.x;
+				}
+			}
 			this.objects[i].setSpeed(v);
+			
+			//updateDestination
 			var pos = this.objects[i].getPosition();
 			this.objects[i].physics.destination = cc.p(pos.x+v.x,pos.y+v.y);
 		}
@@ -70,6 +82,7 @@ var Space = cc.Node.extend({
 			var pos = object.physics.destination;
 			var tiles = this.tileMap.getSurroundTile(pos,"through");
 			var collision = false;
+			object.physics.status = gameConstant.objectStatus.onAir;
 			for(var ii=0; ii<tiles.length; ii++){
 				var objBox = object.getDestinationBoundingBox();
 				if(tiles[ii].status == false){
@@ -96,6 +109,8 @@ var Space = cc.Node.extend({
 							case 3 :
 								pos = (cc.p(pos.x,pos.y+rect.height));
 								speed[1] = true;
+								object.physics.status = gameConstant.objectStatus.onGround;
+								console.log(object.physics.status)
 								break;						
 						}
 						collision = true;
@@ -135,6 +150,7 @@ var Space = cc.Node.extend({
 										pos = (cc.p(pos.x+rect.width,pos.y));
 										speed[0] = true;
 									}
+									object.physics.status = gameConstant.objectStatus.onGround;
 									break;
 								case 7 :
 									if (rect.width>=rect.height){
@@ -145,6 +161,7 @@ var Space = cc.Node.extend({
 										pos = (cc.p(pos.x-rect.width,pos.y));
 										speed[0] = true;
 									}
+									object.physics.status = gameConstant.objectStatus.onGround;
 									break;							
 							}							
 						}
