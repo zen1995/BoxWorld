@@ -153,7 +153,7 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseUp:function(event){
 		var location = event.getLocation();
-		if(location.x>gameConstant.winSize.width){
+		if(location.x>gameConstant.winSize.width/2){
 			return;
 		}
 		this.touchStatus = false;
