@@ -20,6 +20,7 @@ var Layer_analogStick = cc.Layer.extend({
 		this.init();
 		this.initStick();
 		
+		
 		if("mouse" in cc.sys.capabilities){
 			cc.eventManager.addListener({
 					event: cc.EventListener.MOUSE,
@@ -52,24 +53,25 @@ var Layer_analogStick = cc.Layer.extend({
 		this.touchStatus = false;
 	},
 	
-
-	
 	initStick:function(){
-		var stickposition = cc.p(0,0);
+		var stickposition = cc.p(100,100);
+		var posZero = cc.p(0,0);
 		this.stick.background = new cc.DrawNode();
 		this.stick.background.setPosition(stickposition);
-		this.stick.background.drawDot(stickposition, this.stick.info.l2, cc.color(100,100,100,150));
-		this.stick.background.drawDot(stickposition, this.stick.info.l1, cc.color(175,175,175,150));
-		this.stick.background.drawDot(stickposition, this.stick.info.l0, cc.color(225,225,225,150));
+		this.stick.background.drawDot(posZero, this.stick.info.l2, cc.color(100,100,100,150));
+		this.stick.background.drawDot(posZero, this.stick.info.l1, cc.color(175,175,175,150));
+		this.stick.background.drawDot(posZero, this.stick.info.l0, cc.color(225,225,225,150));
 		this.addChild(this.stick.background,0);
 		
 		this.stick.stick = new cc.DrawNode();
-		this.stick.stick.drawDot(stickposition,20,cc.color(0,191,255,255));
+		this.stick.stick.drawDot(posZero,20,cc.color(0,191,255,255));
 		this.stick.stick.setPosition(stickposition);
 		this.addChild(this.stick.stick);
 		
 
 	},
+	
+	
 	
 	update:function(){
 		if(this.touchStatus == false){
@@ -106,9 +108,9 @@ var Layer_analogStick = cc.Layer.extend({
 		}
 		this.touchStatus = true;
 		this.stick.background.setVisible(true);
-		this.stick.background.setPosition(location);
+		//this.stick.background.setPosition(location);
 		this.stick.stick.setVisible(true);
-		this.stick.stick.setPosition(location);
+		//this.stick.stick.setPosition(location);
 	},
 	
 	mouseMove:function(event){
@@ -145,8 +147,9 @@ var Layer_analogStick = cc.Layer.extend({
 	
 	mouseUp:function(event){
 		this.touchStatus = false;
-		this.stick.background.setVisible(false);
-		this.stick.stick.setVisible(false);
+//		this.stick.background.setVisible(false);
+//		this.stick.stick.setVisible(false);
+		this.stick.stick.setPosition(this.stick.background.getPosition());
 	},
 	
 	coordinateToDirection:function(level,v){

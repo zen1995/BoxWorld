@@ -34,7 +34,6 @@ var Space = cc.Node.extend({
 	},
 	
 	update:function(){
-		//cc.log("step")
 		this.step();
 	},
 	
@@ -234,4 +233,4 @@ var Space = cc.Node.extend({
 		
 	}
 	
-})
+});
