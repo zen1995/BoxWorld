@@ -1,5 +1,6 @@
 var layer_tileMap = cc.Layer.extend({
 	myBox:null,
+	space:null,
 	ctor:function(){
 		this._super();
 		this._map = new baseTMXTiledMap(res.tmx_map1);
@@ -8,6 +9,7 @@ var layer_tileMap = cc.Layer.extend({
 
 		var space = new Space({},this._map);
 		this.addChild(space);
+		this.space = space;
 		
 		var box = new MyBox();
 		this.addChild(box);

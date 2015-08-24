@@ -6,6 +6,7 @@ var Space = cc.Node.extend({
 	},
 	blocks:null,
 	tileMap:null,
+	bullets:null,
 	ctor:function(config,tileMap){
 		this._super();
 		this.init(config,tileMap);
@@ -18,6 +19,8 @@ var Space = cc.Node.extend({
 		this.objects = new Array();
 		this.blocks = new Array();
 		this.tileMap = tileMap;
+		this.bullets = new Array();
+		globalVars.space = this;
 	},
 	
 	mySchedule:function(callback,interval){
@@ -41,10 +44,36 @@ var Space = cc.Node.extend({
 		this.objects.push(obj);
 	},
 	
+	addBullet:function(bullet){
+		this.bullets.push(bullet);
+	},
+	
+	removeBullet:function(obj){
+		this.removeObjFromArray(obj,this.bullets);
+		obj.getParent().removeChild(obj);
+	},
+	
+	removeObjFromArray:function(obj,array){
+		var index = -1;
+		for(var i=0;i<array.length;i++){
+			if(array[i] == obj){
+				index = i;
+				break;
+			}
+		}
+		if(index == -1){
+			cc.log("unable to find obj in the array");
+		}
+		else{
+			array.splice(index,1);
+		}
+	},
+	
 	step:function(){
 		this.updateDestination();
 		this.collisionWithBlock();
 		this.collisionWithBox();
+		this.updateBullets();
 	},
 	
 	updateDestination:function(){
@@ -229,6 +258,12 @@ var Space = cc.Node.extend({
 			obj1.setPosition(obj1.physics.destination);
 		}
 		
+	},
+	
+	updateBullets:function(){
+		for(var i=0;i<this.bullets.length;i++){
+			this.bullets[i].updatePosition();
+		}
 	}
 	
 });

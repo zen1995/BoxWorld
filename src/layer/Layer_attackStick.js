@@ -7,11 +7,10 @@ var Layer_attackStick = cc.Layer.extend({
 			l1:40,
 			l2:60,
 		},
-		level:"l0",
-		command:null,
+		//command:null,
+		direction:null,
 	},
 	touchStatus:null,
-	stickBackground:null,
 	listener:{
 		mouse:null
 	},
@@ -74,17 +73,8 @@ var Layer_attackStick = cc.Layer.extend({
 	update:function(){
 		if(this.touchStatus == false){
 			return;
-		}/*
-		switch (this.stick.level){
-			case "l0" :
-				return;
-			case "l1" :
-				globalVars.myBox.move(this.stick.command);
-				break;
-			case "l2" :
-				globalVars.myBox.move(this.stick.command);
-				break;
-		}*/
+		}
+		globalVars.myBox.attack(this.stick.direction);
 	},
 	
 	touchDown:function(touches,event){
@@ -115,6 +105,8 @@ var Layer_attackStick = cc.Layer.extend({
 		//this.stick.background.setPosition(location);
 		this.stick.stick.setVisible(true);
 		//this.stick.stick.setPosition(location);
+		
+		this.setDirection(cc.p(location.x-this.stick.background.x,location.y-this.stick.background.y));
 	},
 	
 	mouseMove:function(event){
@@ -124,28 +116,15 @@ var Layer_attackStick = cc.Layer.extend({
 		}
 		var distance = Math.sqrt((location.x-this.stick.background.x)*(location.x-this.stick.background.x)
 				+(location.y-this.stick.background.y)*(location.y-this.stick.background.y));
-		if(distance<=this.stick.info.l0){
+		if(distance<=this.stick.info.l2){
 			this.stick.stick.setPosition(location);
-			this.coordinateToDirection("l0",cc.p((location.x-this.stick.background.x),
-				(location.y-this.stick.background.y)));
-		}
-		else if (distance>this.stick.info.l0&&distance<=this.stick.info.l1){
-			this.stick.stick.setPosition(location);
-			this.coordinateToDirection("l1",cc.p((location.x-this.stick.background.x),
-				(location.y-this.stick.background.y)));
-		}
-		else if(distance>this.stick.info.l1&&distance<=this.stick.info.l2){
-			this.stick.stick.setPosition(location);
-			this.coordinateToDirection("l2",cc.p((location.x-this.stick.background.x),
-				(location.y-this.stick.background.y)));
 		}
 		else {
 			var rate = this.stick.info.l2/distance;
 			this.stick.stick.setPosition(cc.p(this.stick.background.x+(location.x-this.stick.background.x)*rate,
 				this.stick.background.y+(location.y-this.stick.background.y)*rate));
-			this.coordinateToDirection("l2",cc.p((location.x-this.stick.background.x),
-				(location.y-this.stick.background.y)));
 		}
+		this.setDirection(cc.p(location.x-this.stick.background.x,location.y-this.stick.background.y));
 		
 	},
 	
@@ -161,23 +140,12 @@ var Layer_attackStick = cc.Layer.extend({
 		this.stick.stick.setPosition(this.stick.background.getPosition());
 	},
 	
-	coordinateToDirection:function(level,v){
-		this.stick.level = level;
-		if(v.x>=0&&v.x>=Math.abs(v.y)){
-			this.stick.command = "right";
-		}
-		else if(v.x<=0&&v.x<=Math.abs(v.y)){
-			this.stick.command = "left";
-		}
-		else if(v.y>=0&&v.y>=Math.abs(v.x)){
-			this.stick.command = "up";
-		}
-		else if(v.y<=0&&v.y<=Math.abs(v.x)){
-			this.stick.command = "down";
-		}else{
-			cc.log("unknown command")
-		}
+	setDirection:function(v){
+		var l = Math.sqrt((v.x*v.x)+v.y*v.y);
+		v = cc.p(v.x/l,v.y/l);
+		this.stick.direction = v;
 	}
+	
 		
 });
 

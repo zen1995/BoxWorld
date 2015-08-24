@@ -21,6 +21,7 @@
         "src/object/MyBox.js",
         "src/object/Box.js",
         "src/object/physics.js",
+        "src/object/bullet.js",
         
         "src/layer/layer_tileMap.js",
         "src/layer/Layer_background.js",
