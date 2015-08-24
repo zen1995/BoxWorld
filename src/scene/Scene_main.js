@@ -1,4 +1,4 @@
-var Scene_main=cc.Scene.extend({
+var Scene_main = cc.Scene.extend({
 	ctor:function(){
 		this._super();
 		this.initGameInfo();
@@ -19,4 +19,4 @@ var Scene_main=cc.Scene.extend({
 		gameConstant.winSize.width = cc.director.getWinSize().width;
 		gameConstant.winSize.height = cc.director.getWinSize().height;
 	}
-});
+});//Scene_main Scene_main

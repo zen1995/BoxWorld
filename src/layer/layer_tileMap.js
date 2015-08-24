@@ -26,7 +26,6 @@ var layer_tileMap = cc.Layer.extend({
 	
 	test:function(){
 		var rect = cc.rect(0,0,100,100);
-		//console.log(rect);
 	},
 	
 	update:function(){

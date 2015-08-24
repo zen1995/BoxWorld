@@ -9,7 +9,7 @@ var Bullet = cc.DrawNode.extend({
 		this.physics = [];
 		this.physics.speed = cc.p(speed.x*4,speed.y*4);
 		this.setPosition(position);
-		this.scheduleOnce(this.removeThis,3)
+		this.scheduleOnce(this.removeThis,3);
 	},
 	
 	updatePosition:function(){
