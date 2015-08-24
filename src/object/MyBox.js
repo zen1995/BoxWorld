@@ -3,7 +3,8 @@ var MyBox = basePhysicsObject.extend({
 		destination:null,
 		speed:null,
 		mass:null,
-		status:null
+		status:null,
+		type:null
 	},
 	attackCounter:{
 		current:0,
@@ -20,7 +21,8 @@ var MyBox = basePhysicsObject.extend({
 	init:function(){
 		this.physics.speed = cc.p(3,0);
 		this.physics.mass = 10;
-		this.status = gameConstant.objectStatus.onAir;
+		this.physics.status = gameConstant.objectStatus.onAir;
+		this.physics.type = gameConstant.objectType.myBox;
 	},
 	
 	move:function(direction){
@@ -50,7 +52,7 @@ var MyBox = basePhysicsObject.extend({
 	},
 	
 	createBullet:function(direction){
-		var bullet = new Bullet(this.getPosition(),direction);
+		var bullet = new Bullet(this.getPosition(),direction,[gameConstant.objectType.enemy]);
 		var parent = this.getParent();
 		parent.addChild(bullet);
 		globalVars.space.addBullet(bullet)

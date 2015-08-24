@@ -53,6 +53,11 @@ var Space = cc.Node.extend({
 		obj.getParent().removeChild(obj);
 	},
 	
+	removeObject:function(obj){
+		this.removeObjFromArray(obj,this.objects);
+		obj.getParent().removeChild(obj);		
+	},
+	
 	removeObjFromArray:function(obj,array){
 		var index = -1;
 		for(var i=0;i<array.length;i++){
@@ -74,6 +79,7 @@ var Space = cc.Node.extend({
 		this.collisionWithBlock();
 		this.collisionWithBox();
 		this.updateBullets();
+		this.verifyBullets();
 	},
 	
 	updateDestination:function(){
@@ -263,6 +269,23 @@ var Space = cc.Node.extend({
 	updateBullets:function(){
 		for(var i=0;i<this.bullets.length;i++){
 			this.bullets[i].updatePosition();
+		}
+	},
+	
+	verifyBullets:function(){
+		for(var i=0;i<this.objects.length;i++){
+			for(var ii=0;ii<this.bullets.length;ii++){
+				var obj = this.objects[i];
+				var bullets = this.bullets[ii];
+				var objBox = this.objects[i].getBoundingBox();
+				var bulletPos = this.bullets[ii].getPosition();
+				if(cc.rectContainsPoint(objBox,bulletPos)){
+					var index = Tools.getIndex(bullets.target,obj.physics.type);
+					if(index >= 0){
+						this.removeObject(this.objects[i]);
+					}
+				}
+			}
 		}
 	}
 	
