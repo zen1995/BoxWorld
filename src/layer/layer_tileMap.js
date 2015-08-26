@@ -6,7 +6,7 @@ var layer_tileMap = cc.Layer.extend({
 		this._map = new baseTMXTiledMap(res.tmx_map1);
 		this.addChild(this._map,-1);
 		globalVars.tileMap = this._map;
-		this._map.getVisableTiles(cc.p(100,100));
+		this._map.getVisableTiles(cc.p(300,300));
 		this.test();
 
 		var space = new Space({},this._map);
