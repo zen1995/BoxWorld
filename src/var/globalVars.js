@@ -1,4 +1,5 @@
 var globalVars = {
 	myBox:null,
-	space:null
+	space:null,
+	tileMap:null,
 }

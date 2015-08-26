@@ -17,6 +17,7 @@
         "src/var/globalVars.js",
         "src/var/gameConstant.js",
         "src/instance/tools.js",
+        "src/instance/game.js",
         
         "src/object/base.js",
         "src/object/MyBox.js",

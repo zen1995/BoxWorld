@@ -1,7 +1,10 @@
 var baseTMXTiledMap = cc.TMXTiledMap.extend({
 	ctor:function(map){
 		this._super(map);
+		this.testDraw = new cc.DrawNode();
+		this.addChild(this.testDraw,10);
 	},
+	
 	/**
 	 * 瓦片地图坐标原点在左上角
 	 * 获取某一瓦片左上角的坐标
@@ -74,7 +77,148 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 	 	);
 	 	return returnArray;
 		
-	}
+	},
+	
+	
+//-----------------光线效果所需函数----------------------
+
+	/**
+	 * 
+	 * @param {cc.p} p tile坐标系中的坐标
+	 * @param {String} layerName
+	 */
+	getTileOfLayer:function(p,layerName){
+		var tile = new Object;
+		var layer = this.this.getLayer(layerName);
+		var tileId = layer.getTileGIDAt(p);
+		if(tileId <= 0){
+			tile.status = false;
+		}
+		else{
+			tile = this.constructTileInfo(p)
+		}
+		return tile;
+	},
+	
+	/**
+	 * 
+	 *@param {cc.p} p tile坐标系中的坐标
+	 */
+	constructTileInfo:function(p){
+		var tile = new Object;
+		tile.status = true;
+		tile.edges = new Array();
+		tile.p = p;
+		//1 2
+		//3 4
+		var tileSize = this.getTileSize();
+		var p1 = this.getTileSpacePosition(p);
+		var p2 = cc.p(p1.x+tileSize.width,p.y);
+		var p3 = cc.p(p1.x+tileSize.width,p.y-tileSize.height);
+		var p4 = cc.p(p1.x,p.y-tileSize.height);
+		
+		tile.edges.push(game.edge(p1,p2),game.edge(p2,p3),game.edge(p3,p4),game.edge(p4,p1));
+		return tile;
+	},
+	
+	getVisableTiles:function(p){
+		var parent = this.getParent();
+		var p0 = parent.getPosition();
+		var p1 = this.getTileSpacePosition(p0);
+		var p2 = this.getTileSpacePosition(cc.p(p0.x+gameConstant.winSize.width,
+			p0.y+gameConstant.winSize.height));
+		var tiles = new Array();
+		//获取显示到的瓦片信息
+		for(var i= p1.x-1,j=0;i<=p2.x+1;i++,j++){
+			tiles[j] = new Array();
+			for(var ii=p2.y-1,k=0;ii<=p1.y+1;ii++,k++){
+				if(i==p1.x-1||i==p2.x+1){// left
+					tiles[j][k] = this.constructTileInfo( cc.p(i,ii) )
+				}
+				else if(i==p2.x+1){// right
+					tiles[j][k] = this.constructTileInfo( cc.p(i,ii) )
+				}
+				else{
+					if(ii=p2.y-1){//up
+						tiles[j][k] = this.constructTileInfo( cc.p(i,ii) )
+					}
+					else if(p1.y+1){//down
+						tiles[j][k] = this.constructTileInfo( cc.p(i,ii) )
+					}
+					else{
+						tiles[j][k] = this.getTileOfLayer(p,"through");						
+					}
+				}
+			}
+		}
+		
+		//获取tile的中的未被重叠edge信息
+		var edges = new Array();
+		for(var i=0;i<tiles.length;i++){
+			for(var ii=0;ii<tiles[i].length;ii++){
+				var tile = tiles[i][ii];
+				if(tile.status == false){
+					return;
+				}
+				//处于边缘的边不考虑
+				var d = [true,true,true,true];//up right down left
+				if(ii == 0 || p.y<tile.getGameSpacePosition().y){//up
+					d[0] = false;
+				}
+				if(ii == tiles[i].length-1 
+					|| p.y>tile.getGameSpacePosition().y-this.getTileSize().height){//down
+					d[2] = false
+				}
+				if(i == 0 || p.x>tile.getGameSpacePosition().x){// left
+					d[3] == false
+				}
+				if(i == tiles.length || p.x<tile.getGameSpacePosition().x+this.getTileSize().width){//right
+					d[1] == false
+				}
+				
+				if(tiles[i-1][ii].status == false && d[3]){//left tile do not exist
+					var centerPoint = Tools.calculateCenterPoint(edges[3].p1,edges[3].p2);
+					tile.edges[3].destance = Tools.calculateDistance(centerPoint,p);
+					edges.push(tile.edges[3] );
+				}
+				if(tiles[i][ii-1].status == false && d[0]){//up 
+					var centerPoint = Tools.calculateCenterPoint(edges[0].p1,edges[0].p2);
+					tile.edges[0].destance = Tools.calculateDistance(centerPoint,p);
+					edges.push(tile.edges[0]);
+				}
+				if(tiles[i+1][ii].status == false && d[1]){//right
+					var centerPoint = Tools.calculateCenterPoint(edges[1].p1,edges[1].p2);
+					tile.edges[1].destance = Tools.calculateDistance(centerPoint,p);
+					edges.push(tile.edges[1]);
+				}
+				if(tiles[i][ii+1].status == false && d[2]){//down
+					var centerPoint = Tools.calculateCenterPoint(edges[2].p1,edges[2].p2);
+					tile.edges[2].destance = Tools.calculateDistance(centerPoint,p);
+					edges.push(tile.edges[2]);
+				}				
+			}
+		}
+		//按 distance 排序
+		for(var i=0;i<edges.length;i++){
+			var minIndex = i;
+			for(var ii=i;ii<edges.length;ii++){
+				if(edges[ii].distance < edges[minIndex].distance){
+					minIndex = ii;
+				}
+			}
+			var temp = edges[i];
+			edges[i] = edges[minIndex];
+			edges[ii] = temp;
+		}
+		//draw
+		
+		this.testDraw.clear();
+		for(var i=0;i<edges.length;i++){
+			this.testDraw.drawSegment(edges[i].p1, edges[i].p2, 1, cc.color(255, 255, 255, 255));
+		}
+	},
+	
+	
 });
 
 
