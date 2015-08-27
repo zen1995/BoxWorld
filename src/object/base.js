@@ -190,22 +190,22 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 				}
 				if(d[3] && i>0 && tiles[i-1][ii].status == false ){//left tile do not exist
 					var centerPoint = Tools.calculateCenterPoint(tile.edges[3].p1,tile.edges[3].p2);
-					tile.edges[3].destance = Tools.calculateDistance(centerPoint,p);
+					tile.edges[3].distance = Tools.calculateDistance(centerPoint,p);
 					edges.push(tile.edges[3] );
 				}
 				if(d[0] && ii>0 && tiles[i][ii-1].status == false){//up 
 					var centerPoint = Tools.calculateCenterPoint(tile.edges[0].p1,tile.edges[0].p2);
-					tile.edges[0].destance = Tools.calculateDistance(centerPoint,p);
+					tile.edges[0].distance = Tools.calculateDistance(centerPoint,p);
 					edges.push(tile.edges[0]);
 				}
 				if(i+1<tiles.length && tiles[i+1][ii].status == false && d[1]){//right
 					var centerPoint = Tools.calculateCenterPoint(tile.edges[1].p1,tile.edges[1].p2);
-					tile.edges[1].destance = Tools.calculateDistance(centerPoint,p);
+					tile.edges[1].distance = Tools.calculateDistance(centerPoint,p);
 					edges.push(tile.edges[1]);
 				}
 				if(ii+1<tiles[i].length && tiles[i][ii+1].status == false && d[2]){//down
 					var centerPoint = Tools.calculateCenterPoint(tile.edges[2].p1,tile.edges[2].p2);
-					tile.edges[2].destance = Tools.calculateDistance(centerPoint,p);
+					tile.edges[2].distance = Tools.calculateDistance(centerPoint,p);
 					edges.push(tile.edges[2]);
 				}			
 			}
@@ -270,6 +270,39 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 //						//console.log("find pre");
 //						break;
 //					}
+				}
+			}
+		}
+
+		for(var i=0;i<edges.length;i++){
+			var edge = edges[i];
+			if(edge.next == -1){
+				for(var ii=i+1;ii<edges.length;ii++){
+					
+					var result = Tools.beamIntersectEdge([p,edge.p2],[edges[ii].p1,edges[ii].p2],this.testDraw);
+					if(result != false){
+						edges[ii].p1 = result;
+						edge.next = edges[ii];
+						edges[ii].pre = edge;
+						//console.log("find next");
+						break;
+					}
+				}
+			}
+			if(edge.pre == -1){
+				for(var ii=i+1;ii<edges.length;ii++){
+					var result = Tools.beamIntersectEdge([p,edge.p1],[edges[ii].p1,edges[ii].p2],this.testDraw);
+//					if(cc.pointEqualToPoint(edge.p1,cc.p(288,160)) ){
+//						//console.log(edge,result)//&& cc.pointEqualToPoint(edges[ii].p1,cc.p(256,0))
+//						//console.log(edges[ii].p1)
+//					}
+					if(result != false){
+						edges[ii].p2 = result;
+						edge.pre = edges[ii];
+						edges[ii].next = edge;
+						//console.log("find pre");
+						break;
+					}
 				}
 			}
 		}

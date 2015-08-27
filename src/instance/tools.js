@@ -37,7 +37,7 @@ var Tools = {
 		}
 		var returnPoint = cc.pIntersectPoint(beam[0],p2,edge[0],edge[1]);
 		drawNode.drawSegment(beam[0], returnPoint, 2, cc.color(255, 0, 0, 255));
-		console.log(beam[0],p2,edge[0],edge[1]);
+		//console.log(beam[0],p2,edge[0],edge[1]);
 		return returnPoint
 	}
 }
