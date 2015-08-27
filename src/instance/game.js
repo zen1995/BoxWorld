@@ -11,3 +11,5 @@ var Edge = function(p1,p2){
 game.edge = function(p1,p2){
 	return new Edge(p1,p2);
 }
+
+

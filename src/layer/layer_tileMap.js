@@ -8,6 +8,7 @@ var layer_tileMap = cc.Layer.extend({
 		globalVars.tileMap = this._map;
 		this._map.getVisableTiles(cc.p(300,300));
 		this.test();
+		this.y = 100;
 
 		var space = new Space({},this._map);
 		this.addChild(space);

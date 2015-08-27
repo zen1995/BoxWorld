@@ -184,8 +184,9 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 				if(i == 0 || p.x>this.getGameSpacePosition(tile.p).x){// left
 					d[3] = false;
 				}
+
 				if(i == tiles.length || p.x<this.getGameSpacePosition(tile.p).x+this.getTileSize().width){//right
-					d[1] == false
+					d[1] = false;
 				}
 				if(d[3] && i>0 && tiles[i-1][ii].status == false ){//left tile do not exist
 					var centerPoint = Tools.calculateCenterPoint(tile.edges[3].p1,tile.edges[3].p2);
@@ -223,12 +224,58 @@ var baseTMXTiledMap = cc.TMXTiledMap.extend({
 		}
 		
 		//draw
-		
 		this.testDraw.clear();
 		this.testDraw.drawDot(cc.p(300,300),10,cc.color(255,0,0))
+//		for(var i=0;i<edges.length;i++){
+//			this.testDraw.drawSegment(edges[i].p1, edges[i].p2, 2, cc.color(255, 255, 255, 255));
+//		}
+		//连接边
+		for(var i=0;i<edges.length;i++){
+			var edge = edges[i];
+			if(edge.next == -1){
+				for(var ii=i;ii<edges.length;ii++){
+					//if(cc.pointEqualToPoint(edge.p2,edges[ii].p1)){//如果两条边恰好邻接
+					if(edge.p2.x == edges[ii].p1.x && edge.p2.y == edges[ii].p1.y){
+						edge.next = edges[ii];
+						edges[ii].pre = edge;
+						this.testDraw.drawDot(edge.p2,3,cc.color(0,255,0));
+						//console.log("a");
+						break;
+					}
+//					var result = Tools.beamIntersectEdge([p,edge.p2],[edges[ii].p1,edges[ii].p2],this.testDraw);
+//					if(result != false){
+//						edges[ii].p1 = result;
+//						edge.next = edges[ii];
+//						edges[ii].pre = edge;
+//						//console.log("find next");
+//						break;
+//					}
+				}
+			}
+			if(edge.pre == -1){
+				for(var ii=i;ii<edges.length;ii++){
+					//if(cc.pointEqualToPoint(edge.p1,edges[ii].p2)){//如果两条边恰好邻接
+					if(edge.p1.x == edges[ii].p2.x && edge.p1.y == edges[ii].p2.y){
+						edge.pre = edges[ii];
+						edges[ii].next = edge;
+						//console.log("b");
+						this.testDraw.drawDot(edge.p1,3,cc.color(0,255,0));
+						break;
+					}
+//					var result = Tools.beamIntersectEdge([p,edge.p1],[edges[ii].p1,edges[ii].p2],this.testDraw);
+//					if(result != false){
+//						edges[ii].p2 = result;
+//						edge.pre = edges[ii];
+//						edges[ii].next = edge;
+//						//console.log("find pre");
+//						break;
+//					}
+				}
+			}
+		}
+		
 		for(var i=0;i<edges.length;i++){
 			this.testDraw.drawSegment(edges[i].p1, edges[i].p2, 2, cc.color(255, 255, 255, 255));
-			//break;
 		}
 	},
 	
